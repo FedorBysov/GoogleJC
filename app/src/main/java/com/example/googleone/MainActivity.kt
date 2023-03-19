@@ -1,11 +1,15 @@
 package com.example.googleone
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,14 +17,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.googleone.ui.theme.GoogleOneTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            //  text function
-            //  Text(text = "Hello World!")
-            MessageCard(Message("Fedor", "AndroidStart"))
+            GoogleOneTheme() {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    MessageCard(
+                        Message("Fedor", "AndroidStart")
+                    )
+                }
+            }
         }
     }
 }
@@ -39,21 +48,48 @@ fun MessageCard(msg: Message) {
                 .size(40.dp)
                 // Clip image to be shaped as a circle
                 .clip(CircleShape)
+                .border(1.5.dp, MaterialTheme.colors.secondary, CircleShape)
+
         )
 
         Spacer(modifier = Modifier.size(8.dp))
-        
+
         Column() {
-            Text(msg.author)
+            Text(
+                text = msg.author,
+                color = MaterialTheme.colors.secondaryVariant,
+                style = MaterialTheme.typography.subtitle2
+            )
             Spacer(modifier = Modifier.size(4.dp))
-            Text(msg.body)
+
+            Surface(shape = MaterialTheme.shapes.large, elevation = 2.dp) {
+                Text(
+                    text = msg.body,
+                    modifier = Modifier.padding(all = 4.dp),
+                    style = MaterialTheme.typography.body1
+                )
+            }
+
+
         }
     }
 
 }
 
-@Preview
+@Preview(name = "Light Mode")
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    name = "Dark Mode"
+)
 @Composable
 fun PreviewMessageCard() {
-    MessageCard(Message("Fedor", "AndroidStart"))
+    GoogleOneTheme() {
+        Surface() {
+            MessageCard(
+                Message("Fedor", "AndroidStart")
+            )
+        }
+    }
+
 }
